@@ -1,0 +1,439 @@
+#include <iostream>
+
+using namespace std;
+
+class node
+{
+
+    string city;
+    int w;
+    node *next;
+    int f;
+public:
+      node()
+      {
+          city="";
+          w=0;
+          next=NULL;
+          f=0;
+      }
+    friend class graph;
+};
+class stack
+{
+   node *arr[20];
+   int top=-1;
+   public:
+       void push(node *n)
+       {
+           top++;
+           arr[top]=n;
+       }
+       node *pop()
+       {
+           node *n=arr[top];
+           top--;
+           return n;
+
+       }
+       int isempty()
+       {
+           if(top==-1)
+           {
+               return 1;
+           }
+           else
+           {
+
+               return 0;
+           }
+       }
+       friend class graph;
+};
+class graph
+{
+    int cont=0;
+    int i=-1;
+    node *a[20];
+public:
+
+    void add(node *t)
+    {
+        i++;
+        a[i]=t;
+    }
+    void addcity()
+    {
+        node *n=new node();
+        cout<<"\n Enter city name=";
+        cin>>n->city;
+        add(n);
+        cont++;
+        cout<<"\n City added successfully";
+    }
+    void addflight()
+    {
+        string f,t;
+        int y;
+        int flag1=0;
+        int flag2=0;
+        node *v=new node();
+        node *p,*q;
+        cout<<"\n Enter from::";
+        cin>>f;
+        cout<<"\n Enter To::";
+        cin>>t;
+        cout<<"\n Enter time=";
+        cin>>y;
+        for(int j=0;j<cont;j++)
+        {
+            if(a[j]->city==f)
+            {
+                cout<<"\n"<<f<<":City present";
+                flag1=1;
+                p=a[j];
+
+            }
+            if(a[j]->city==t)
+            {
+
+                cout<<"\n"<<t<<":City Present";
+                flag2=1;
+                q=a[j];
+            }
+        }
+        if(flag1!=1 || flag2!=1)
+        {
+            cout<<"\nCity not present in this Airport!!!";
+        }
+        else
+        {
+            v->city=q->city;
+            v->w=y;
+            v->f=0;
+            v->next=NULL;
+            while(p->next!=NULL)
+            {
+                p=p->next;
+            }
+            p->next=v;
+            cout<<"\nflight added..";
+        }
+    }
+
+    void displayboard()
+    {
+        cout<<"\n.....Airport Services.....\n";
+        node *temp;
+        for(int j=0;j<cont;j++)
+        {
+           temp=a[j];
+           while(temp!=NULL)
+           {
+               cout<<temp->city<<"==>";
+               temp=temp->next;
+           }
+           cout<<"\n";
+        }
+    }
+    node *search1(string s)
+    {
+        for(int j=0;j<cont;j++)
+        {
+            if(a[j]->city==s)
+            {
+                return a[j];
+            }
+        }
+        cout<<"\n City not present!!";
+    }
+ void in_order()
+ {//take one for loop and make flag of all the city as zero.....to display it again after inserting new city...
+     for(int k=0;k<cont;k++)
+     {
+        a[k]->f=0;
+     }
+    stack s;
+    node *temp;
+    string str;
+    cout<<"\n Enter city=";
+    cin>>str;
+    int co=0;
+    temp=search1(str);
+    s.push(temp);
+    while(s.isempty()==0)
+    {
+        temp=s.pop();
+        if(temp->f==0)
+        {
+            cout<<"\n=>"<<temp->city;
+            co++;
+            temp->f=1;
+        }
+        temp=temp->next;
+        while(temp!=NULL)
+        {
+            if(search1(temp->city)->f==0)
+            {
+                s.push(search1(temp->city));
+            }
+            temp=temp->next;
+        }
+
+    }
+    if(co!=cont)
+    {
+        for(int j=0;j<cont;j++)
+        {
+            if(a[j]->f==0)
+            {
+                cout<<"\n=>"<<a[j]->city;
+            }
+        }
+    }
+ }
+ int findfl(string f,string t)
+ {
+     int flag1=0;
+     int flag2=0;
+     for(int j=0;j<cont;j++)
+     {
+         if(a[j]->city==f)
+         {
+             flag1=1;
+         }
+         if(a[j]->city==t)
+         {
+             flag2=1;
+         }
+     }
+     if(flag1==1 && flag2==1)
+     {
+
+         return 1;
+     }
+     else
+     {
+
+         return 0;
+     }
+ }
+void del_flight()
+{
+  string f,t;
+  node *m;
+  node *p;
+  cout<<"\n Enter from::";
+  cin>>f;
+  cout<<"\n enter To::";
+  cin>>t;
+  if(findfl(f,t)==1)
+  {
+      for(int j=0;j<cont;j++)
+      {
+          if(a[j]->city==f)
+          {
+              m=a[j];
+              break;
+          }
+      }
+      p=m->next;
+      while(p!=NULL && p->city!=t)
+      {
+          m=m->next;
+          p=p->next;
+      }
+      m->next=p->next;
+      p->next=NULL;
+      delete p;
+      cout<<"\n Deleted successfully";
+
+  }
+  else
+  {
+
+      cout<<"\n City not present!!!";
+  }
+
+}
+int find_city(string str)
+{
+    for(int j=0;j<cont;j++)
+    {
+        if(a[j]->city==str)
+        {
+          return 1;
+        }
+    }
+    return 0;
+}
+void del_city()
+{
+    int m;
+    node *p,*q,*t;
+    node *temp1,*temp2;
+    string str;
+    cout<<"\n Enter city to be delelte=";
+    cin>>str;
+    if(find_city(str)==1)
+    {
+        for(m=0;m<cont;m++)
+        {
+            if(a[m]->city==str)
+            {
+                break;
+            }
+        }
+        p=a[m];
+        t=p;
+        while(t!=NULL)
+        {
+            p=t;
+            t=t->next;
+            delete p;
+        }
+
+        while(m < cont-1)
+        {
+            a[m]=a[m+1];
+            m++;
+        }
+
+        cont--;
+
+        for(int k=0;k<cont;k++)
+        {
+            temp1=a[k];
+            temp2=a[k]->next;
+            while(temp2!=NULL)
+            {
+                if(temp2->city==str)
+                {
+                    temp1->next=temp2->next;
+                    node *w=temp2;
+                    temp2=temp2->next;
+                    delete w;
+                }
+                else
+                {
+                temp1=temp1->next;
+                temp2=temp2->next;
+                }
+            }
+
+            }
+            cout<<"\n deleted succefully";
+    }
+    else
+    {
+        cout<<"\n City not Present!!";
+    }
+}
+void out()
+{
+    string str;
+    cout<<"\n enter city=";
+    cin>>str;
+    node *n;
+    int c=0;
+    int k;
+    if(find_city(str)==1)
+    {
+        for(k=0;k<cont;k++)
+        {
+            if(a[k]->city==str)
+            {
+
+              break;
+            }
+        }
+        n=a[k]->next;
+        while(n!=NULL)
+        {
+            c++;
+            n=n->next;
+        }
+        cout<<"\n outdegree of "<<str<<"::"<<c;
+
+    }
+    else
+    {
+
+        cout<<"\n city not present!!";
+    }
+}
+void in()
+{
+    int c=0;
+    node *n;
+    string str;
+    cout<<"\n enter city=";
+    cin>>str;
+    if(find_city(str)==1)
+    {
+        for(int k=0;k<cont;k++)
+        {
+            n=a[k]->next;
+            while(n!=NULL)
+            {
+                if(n->city==str)
+                {
+                    c++;
+                }
+                n=n->next;
+            }
+        }
+        cout<<"\n Indegree="<<c;
+    }
+
+}
+};
+int main()
+{
+    graph g;
+    int flag=0;
+    int op;
+    while(flag!=1)
+    {
+        cout<<"\n1)add city\n2)add flight\n3)displayboard\n4)inorder\n5)delete flight\n6)delete city\n7)outdegree\n8)indegree\n9)exit";
+        cout<<"\n Enter choice=";
+        cin>>op;
+        switch(op)
+        {
+
+            case 1:
+                   g.addcity();
+                   break;
+            case 2:
+                   g.addflight();
+                   break;
+            case 3:
+                   g.displayboard();
+                   break;
+            case 4:
+                    g.in_order();
+                    break;
+            case 5:
+                    g.del_flight();
+                    break;
+            case 6:
+                    g.del_city();
+                    break;
+            case 7:
+                   g.out();
+                   break;
+            case 8:
+                   g.in();
+                   break;
+
+            case 9:
+                   flag=1;
+                   break;
+            default:
+                   cout<<"\n invalid choice";
+                   break;
+
+        }
+    }
+    return 0;
+}
