@@ -1,0 +1,644 @@
+#include <iostream>
+
+using namespace std;
+class node
+{
+    char data;
+    node *lchild;
+    node *rchild;
+public:
+    friend class tree;
+};
+class queue
+{
+    node *q[20];
+    int f,r;
+public:
+
+    queue()
+    {
+        f=-1;
+        r=-1;
+    }
+    void add(node *t)
+    {
+        r++;
+        q[r]=t;
+    }
+    node *del()
+    {
+        f++;
+        return q[f];
+    }
+    int isempty()
+    {
+        if(r==-1 || f>=r)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    int qsize()
+    {
+        int coun=0;
+        for(int i=f+1;i<=r;i++)
+        {
+            coun++;
+        }
+        return coun;
+    }
+    friend class tree;
+};
+class tree
+{
+    node *stack[20];
+    node *root;
+    queue q;
+public:
+
+    tree()
+    {
+      root=NULL;
+    }
+    node *maketree()
+    {
+        node *n=new node();
+        cout<<"\n Enter element=";
+        cin>>n->data;
+        return n;
+    }
+    void setleft(node *n)
+    {
+        if(n->lchild!=NULL)
+        {
+            cout<<"\n Invalid insertion!!";
+        }
+        else
+        {
+            n->lchild=maketree();
+            q.add(n->lchild);
+        }
+    }
+    void setright(node *n)
+    {
+        if(n->rchild!=NULL)
+        {
+            cout<<"invalid insertion!!";
+        }
+        else
+        {
+            n->rchild=maketree();
+            q.add(n->rchild);
+        }
+    }
+    void create()
+    {
+        root=maketree();
+        q.add(root);
+    }
+    void insert()
+    {
+        node *p;
+        int ch,ch1;
+        while(q.isempty()==0)
+        {
+            p=q.del();
+            cout<<"\ndo you want to insert left child of "<<p->data<<"=";
+            cin>>ch;
+            if(ch==1)
+            {
+                setleft(p);
+            }
+            cout<<"\nDo you want to insert right child of "<<p->data<<"=";
+            cin>>ch1;
+            if(ch1==1)
+            {
+                setright(p);
+            }
+        }
+    }
+    void inorder()
+    {
+        inorder(root);
+    }
+    void inorder(node *temp)
+    {
+        int i=0;
+        while(1)
+        {
+            while(temp!=NULL)
+            {
+                i=i+1;
+                stack[i]=temp;
+                temp=temp->lchild;
+            }
+            if(i==0)
+            {
+                return;
+            }
+
+            temp=stack[i];
+            i--;
+            cout<<"\t"<<temp->data;
+            temp=temp->rchild;
+        }
+    }
+    void preorder()
+    {
+        preorder(root);
+    }
+    void preorder(node *temp)
+    {
+        int i=0;
+        while(1)
+        {
+            while(temp!=NULL)
+            {
+                cout<<"\t"<<temp->data;
+                if(temp->rchild!=NULL)
+                {
+                    i=i+1;
+                    stack[i]=temp->rchild;
+                }
+                temp=temp->lchild;
+            }
+            if(i==0)
+            {
+                return;
+            }
+                temp=stack[i];
+                i--;
+        }
+    }
+    void postorder()
+    {
+        postorder(root);
+    }
+    void postorder(node *temp)
+    {
+        int i=0;
+        while(1)
+        {
+            while(temp!=NULL)
+            {
+                i=i+1;
+                stack[i]=temp;
+                if(temp->rchild!=NULL)
+                {
+                    i=i+1;
+                    stack[i]=temp->rchild;
+                    i=i+1;
+                    stack[i]=NULL;
+                }
+                temp=temp->lchild;
+            }
+            if(i==0)
+            {
+                return;
+            }
+            while(stack[i]!=NULL && i!=0)
+            {
+                temp=stack[i];
+                cout<<"\t"<<temp->data;
+                i--;
+            }
+            if(i!=0)
+            {
+                i--;
+            }
+            if(i==0)
+            {
+                return;
+            }
+            temp=stack[i];
+            i--;
+        }
+    }
+    node *make(node *t)
+    {
+        node *n=new node();
+        n->data=t->data;
+        n->lchild=NULL;
+        n->rchild=NULL;
+        return n;
+    }
+    void operator =(tree &t)
+    {
+        queue q1,q2;
+        node *n1,*n2;
+        root=make(t.root);
+        q1.add(t.root);
+        q2.add(root);
+        while(q1.isempty()==0)
+        {
+            n1=q1.del();
+            n2=q2.del();
+            if(n1->lchild!=NULL)
+            {
+                n2->lchild=make(n1->lchild);
+                q1.add(n1->lchild);
+                q2.add(n2->rchild);
+            }
+            if(n1->rchild!=NULL)
+            {
+                n2->rchild=make(n1->rchild);
+                q1.add(n1->rchild);
+                q2.add(n2->rchild);
+            }
+        }
+    }
+    void rheight()
+    {
+        int i;
+        i=rheight(root);
+        cout<<"\nheight of tree="<<i;
+    }
+    int rheight(node *temp)
+    {
+        int x=0;
+        int y=0;
+        if(temp==NULL)
+        {
+            return -1;
+        }
+        if(temp!=NULL)
+        {
+            x=rheight(temp->lchild);
+            y=rheight(temp->rchild);
+            if(x>y)
+            {
+                return x+1;
+            }
+            else
+            {
+                return y+1;
+            }
+
+        }
+    }
+    void rmirror()
+    {
+        rmirror(root);
+    }
+    void rmirror(node *t)
+    {
+       node *temp;
+       if(t==NULL)
+       {
+           return;
+       }
+       if(t!=NULL)
+       {
+          rmirror(t->lchild);
+          rmirror(t->rchild);
+          temp=t->lchild;
+          t->lchild=t->rchild;
+          t->rchild=temp;
+       }
+    }
+    void rcopy()
+    {
+        node *r=new node();
+        r=rcopy(root);
+        cout<<"\nrecursive copy...";
+        inorder(r);
+    }
+    node *rcopy(node *t)
+    {
+        node *temp;
+        if(t!=NULL)
+        {
+           temp=new node();
+           temp->data=t->data;
+           if(t->lchild!=NULL)
+           {
+               temp->lchild=rcopy(t->lchild);
+           }
+           if(t->rchild!=NULL)
+           {
+               temp->rchild=rcopy(t->rchild);
+
+           }
+        }
+        return temp;
+    }
+    void mirror()
+    {
+        mirror(root);
+    }
+    void mirror(node *temp)
+    {
+        queue q;
+        node *t,*p;
+        q.add(temp);
+        while(q.isempty()==0)
+        {
+            t=q.del();
+            p=t->lchild;
+            t->lchild=t->rchild;
+            t->rchild=p;
+            if(t->lchild!=NULL)
+            {
+                q.add(t->lchild);
+            }
+            if(t->rchild!=NULL)
+            {
+                q.add(t->rchild);
+            }
+        }
+    }
+    void eraset()
+    {
+        eraset(root);
+    }
+    void eraset(node *t)
+    {
+        int i=0;
+        while(1)
+        {
+            while(t!=NULL)
+            {
+                i=i+1;
+                stack[i]=t;
+                if(t->rchild!=NULL)
+                {
+                    i=i+1;
+                    stack[i]=t->rchild;
+                    i=i+1;
+                    stack[i]=NULL;
+                }
+                t=t->lchild;
+            }
+            if(i==0)
+            {
+                return;
+            }
+            while(stack[i]!=NULL && i!=0)
+            {
+                t=stack[i];
+                delete t;
+                i--;
+            }
+            if(i!=0)
+            {
+                i--;
+            }
+            if(i==0)
+            {
+                return;
+            }
+            t=stack[i];
+            i--;
+        }
+    }
+void rinorder()
+{
+    cout<<"\nrecurrsive inorder=";
+    if(root!=NULL)
+    {
+    rinorder(root);
+    }
+    else
+    {
+        cout<<"\n tree is empty!!";
+    }
+
+}
+void rinorder(node *temp)
+{
+    if(temp==NULL)
+    {
+        return;
+    }
+    if(temp!=NULL)
+    {
+        rinorder(temp->lchild);
+        cout<<"\t"<<temp->data;
+        rinorder(temp->rchild);
+
+    }
+}
+void rpreorder()
+{
+    cout<<"\nrecurrsive preorder=";
+    rpreorder(root);
+}
+void rpreorder(node *temp)
+{
+    if(temp==NULL)
+    {
+        return;
+    }
+    if(temp!=NULL)
+    {
+        cout<<"\t"<<temp->data;
+        rpreorder(temp->lchild);
+        rpreorder(temp->rchild);
+    }
+}
+void rpostorder()
+{
+    cout<<"\nrecurrsive postorder=";
+    rpostorder(root);
+}
+void rpostorder(node *temp)
+{
+    if(temp==NULL)
+    {
+        return;
+    }
+    if(temp!=NULL)
+    {
+        rpostorder(temp->lchild);
+        rpostorder(temp->rchild);
+        cout<<"\t"<<temp->data;
+    }
+}
+void rerase()
+{
+    rerase(root);
+    cout<<"\nerase succfully";
+}
+void rerase(node *temp)
+{
+    if(temp==NULL)
+    {
+        return;
+    }
+    if(temp!=NULL)
+    {
+        rerase(temp->lchild);
+        rerase(temp->rchild);
+        cout<<"\n deleting "<<temp->data<<"from tree";
+        delete temp;
+    }
+}
+void height()
+{
+    int h=height(root);
+    cout<<"\n height="<<h;
+}
+int height(node *t)
+{
+    int coun=0;
+    int h=-1;
+    queue q1;
+    q1.add(t);
+    while(1)
+    {
+        coun=q1.qsize();
+        if(coun==0)
+        {
+            return h;
+        }
+        h++;
+        while(coun>0)
+        {
+            node *n=q1.del();
+            if(n->lchild!=NULL)
+            {
+                q1.add(n->lchild);
+            }
+            if(n->rchild!=NULL)
+            {
+                q1.add(n->rchild);
+            }
+           coun--;
+         }
+    }
+}
+void count_leaf()
+{
+    count_leaf(root);
+}
+void count_leaf(node *temp)
+{
+    node *n;
+    int coun=0;
+    q.add(temp);
+    while(q.isempty()==0)
+    {
+        n=q.del();
+        if(n->lchild==NULL && n->rchild==NULL)
+        {
+            coun++;
+        }
+        if(n->lchild!=NULL)
+        {
+            q.add(n->lchild);
+        }
+        if(n->rchild!=NULL)
+        {
+            q.add(n->rchild);
+        }
+    }
+    cout<<"\n NO.of Leaf node="<<coun;
+}
+void count_in()
+{
+    count_in(root);
+}
+void count_in(node *temp)
+{
+    int coun=0;
+    node *n;
+    q.add(temp);
+    while(q.isempty()==0)
+    {
+        n=q.del();
+        if(n->lchild!=NULL || n->rchild!=NULL)
+        {
+            coun++;
+        }
+        if(n->lchild!=NULL)
+        {
+            q.add(n->lchild);
+        }
+        if(n->rchild!=NULL)
+        {
+            q.add(n->rchild);
+        }
+    }
+    cout<<"\n no. of internal node="<<coun;
+}
+};
+
+int main()
+{
+    tree t,t1;
+    int flag=0;
+    int op;
+    while(flag!=1)
+    {
+     cout<<"\n1)create\n2)insert\n3)inorder\n4)preorder\n5)postorder\n6)copy(=)\n7)mirror\n8)erase\n9)rinorder\n10)rpreorder\n11)rpostorder\n12)rmirror\13)nheight\n14)rcopy\n15)rerase\n16)height\n17)count leaf &internal node\n18)exit";
+     cout<<"\nenter choice=";
+     cin>>op;
+     switch(op)
+     {
+     case 1:
+            t.create();
+            break;
+     case 2:
+            t.insert();
+            break;
+     case 3:
+            t.inorder();
+            break;
+     case 4:
+             t.preorder();
+             break;
+     case 5:
+            t.postorder();
+            break;
+     case 6:
+             t1=t;
+             cout<<"\n copied tree...";
+             t1.inorder();
+             break;
+     case 7:
+             t.mirror();
+             break;
+     case 8:
+             t.eraset();
+             break;
+     case 9:
+             t.rinorder();
+             break;
+     case 10:
+             t.rpreorder();
+             break;
+     case 11:
+              t.rpostorder();
+              break;
+     case 12:
+              t.rmirror();
+              break;
+     case 13:
+              t.rheight();
+              break;
+     case 14:
+             t.rcopy();
+             break;
+     case 15:
+             t.rerase();
+             break;
+     case 16:
+              t.height();
+               break;
+     case 17:
+             t.count_leaf();
+             t.count_in();
+             break;
+     case 18:
+             flag=1;
+             break;
+     default:
+            cout<<"\n invalid choice!!";
+            break;
+     }
+    }
+    return 0;
+}
