@@ -1,0 +1,331 @@
+package stll;
+import java.util.*;
+import java.util.concurrent.DelayQueue;
+
+class imp
+{
+	Scanner s=new Scanner(System.in);
+	 void main_fun()
+	{
+	int op;
+	int flag=0;
+	while(flag!=1)
+	{
+		System.out.println("...Menu...\n1)Stack\n2)Queue\n3)Vector\n4)LinkedList\n5)HashTable\n6)exit");
+        System.out.println("Enter choice=");
+        op=s.nextInt();
+        switch(op)
+        {
+        case 1: stack(); 
+        	    break;
+        case 2:
+        	   queue();
+        	   break;
+        case 3:
+        	   vector();
+        	   break;
+        case 4:
+        	   list();
+        	   break;
+        case 5:
+        	   hash();
+        	   break;
+        case 6:
+        	   flag=1;
+        	   break;
+        default:
+        	    System.out.println("Invalid Choice!!");
+        	    break;
+        }
+	}
+		
+ }
+void stack()
+{
+	Stack<Integer> st=new Stack<Integer>();
+	int op;
+	int flag=0;
+	int data;
+	while(flag!=1)
+	{
+		
+		System.out.println("1)push\n2)pop\n3)Isempty\n4)top\n5)exit");
+		System.out.println("Enter choice");
+		op=s.nextInt();
+		switch(op)
+		{
+		case 1:
+			    System.out.println("enter data=");
+			    data=s.nextInt();
+			    st.push(data);
+			    break;
+		case 2:
+			   System.out.println("popped element="+st.pop());
+			   break;
+		case 3:
+			   if(st.isEmpty())
+			   {
+				   System.out.println("stack is empty");
+			   }
+			   else
+			   {
+				   System.out.println("stack contains data");
+			   }
+			   break;
+		case 4:
+			   System.out.println("Top of stack="+st.peek());
+			   break;
+		case 5: 
+			   flag=1;
+			   break;
+		default:
+			   System.out.println("Invaild choice");
+			   break;
+		}	
+	}
+}
+void queue()
+{
+	Deque<Integer> q=new Deque<Integer>();
+	int op;
+	int flag=0;
+	int data;
+	while(flag!=1)
+	{
+		
+		System.out.println("1)add\n2)remove\n3)size\n4)display front\n5)exit");
+		System.out.println("Enter choice");
+		op=s.nextInt();
+		switch(op)
+		{
+		case 1:
+			    System.out.println("enter data=");
+			    data=s.nextInt();
+			    q.add(data);
+			    break;
+		case 2:
+			   System.out.println("popped element="+q.remove());
+			   break;
+		case 3:
+			   /*if(q.isEmpty())
+			   {
+				   System.out.println("Queue is empty");
+			   }
+			   else
+			   {
+				   System.out.println("Queue contains data");
+			   }*/
+			   System.out.println("Size of Queue="+q.size());
+			   break;
+		case 4:
+			   System.out.println("front of Queue="+q.peek());
+			   break;
+		case 5: 
+			   flag=1;
+			   break;
+		default:
+			   System.out.println("Invaild choice");
+			   break;
+		}	
+	}
+	
+}
+void vector()
+{
+
+	Vector<Integer> q=new Vector<Integer>();
+	int op;
+	int flag=0;
+	int data;
+	while(flag!=1)
+	{
+		
+		System.out.println("1)add\n2)remove\n3)capacity\n4)display\n5)contains\n6)exit");
+		System.out.println("Enter choice");
+		op=s.nextInt();
+		switch(op)
+		{
+		case 1:
+			    System.out.println("enter data=");
+			    data=s.nextInt();
+			    q.add(data);
+			    break;
+		case 2:
+			   System.out.println("enter index");
+			   data=s.nextInt();
+			   System.out.println("deleted element="+q.remove(data));
+			   break;
+		case 3:
+			   /*if(q.isEmpty())
+			   {
+				   System.out.println("Queue is empty");
+			   }
+			   else
+			   {
+				   System.out.println("Queue contains data");
+			   }*/
+			   System.out.println("capacity of vector="+q.capacity());
+			   break;
+		case 4:
+			    System.out.println("enter index=");
+		        data=s.nextInt();
+			   System.out.println("element="+q.get(data));
+			   break;
+			   
+		case 5: System.out.println("enter index=");
+                data=s.nextInt();
+                if(q.contains(data))
+                {
+                	System.out.println("presen");
+                }
+                else
+                {
+                	System.out.println("not");
+                }
+			   
+			   break;
+		case 6:
+			   flag=1;
+			   break;
+		default:
+			   System.out.println("Invaild choice");
+			   break;
+		}	
+	}
+
+}
+void list()
+{
+	LinkedList<Integer> q=new LinkedList<Integer>();
+	//ListIterator<Integer> l=q.listIterator(0);
+	int op;
+	int flag=0;
+	int data;
+	while(flag!=1)
+	{
+		
+		System.out.println("1)insert first\n2)removefirst\n3)removelast\n4)displaylist\n5)contains\n6)exit");
+		System.out.println("Enter choice");
+		op=s.nextInt();
+		switch(op)
+		{
+		case 1:
+			    System.out.println("enter data=");
+			    data=s.nextInt();
+			    q.addLast(data);
+			    break;
+		case 2:
+			   //System.out.println("enter index");
+			  // data=s.nextInt();
+			   q.removeFirst();
+			   break;
+		case 3:
+			   q.removeLast();
+			   break;
+		case 4:
+			     System.out.println("enter index");
+			     data=s.nextInt();
+			     System.out.println(q.get(data));
+			   
+			   break;
+			   
+		case 5: System.out.println("enter index=");
+                data=s.nextInt();
+                if(q.contains(data))
+                {
+                	System.out.println("presen");
+                }
+                else
+                {
+                	System.out.println("not");
+                }
+			   
+			   break;
+		case 6:
+			   flag=1;
+			   break;
+		default:
+			   System.out.println("Invaild choice"); 
+			   break;
+		}	
+	}
+	
+}
+void hash()
+{
+	Hashtable<Integer,String> h=new Hashtable<Integer,String>();
+	int op;
+	int flag=0;
+	int data;
+	String str;
+	while(flag!=1)
+	{
+		
+		System.out.println("1)insert\n2)remove\n3)isempty\n4)contains\n5)exit");
+		System.out.println("Enter choice");
+		op=s.nextInt();
+		switch(op)
+		{
+		case 1:
+			    System.out.println("enter data=");
+			    data=s.nextInt();
+			    str=s.next();
+			    h.put(data,str);
+			    break;
+		case 2:
+			   System.out.println("enter index");
+			  data=s.nextInt();
+			   h.remove(data);
+			   break;
+		case 3:
+			   if(h.isEmpty())
+			   {
+				   System.out.println("empty");
+			   }
+			   else
+			   {
+				   System.out.println("contains data");
+			   }
+			   break; 
+		case 4: System.out.println("enter index=");
+                str=s.next();
+                if(h.contains(str))
+                {
+                	System.out.println("presen");
+                }
+                else
+                {
+                	System.out.println("not");
+                }
+			   
+			   break;
+		case 5:
+			   flag=1;
+			   break;
+		default:
+			   System.out.println("Invaild choice"); 
+			   break;
+		}	
+	}
+	
+}
+	 
+}//classend...
+	
+
+
+
+
+
+
+
+public class Stl {
+
+	public static void main(String[] args) 
+	{
+		// TODO Auto-generated method stub
+       imp i=new imp();
+       i.main_fun();
+	}
+
+}
