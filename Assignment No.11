@@ -1,0 +1,209 @@
+//Created packege "java1" had Common.java file
+
+package java1;
+public interface common 
+{
+	void add();
+	void remove();
+	void find();
+	void size();
+	void isempty();
+}
+
+//Created sll.java and imported above packege
+
+package list;
+import java.util.*;
+import java1.*;
+class node
+{
+	public int data;
+	public node next;
+	node()
+	{
+		data=0;
+		next=null;
+	}
+	
+}
+class slllist implements common
+{
+	node head;
+     public slllist()
+     {
+    	 head=null;
+     }
+     Scanner s=new Scanner(System.in);
+     
+     public void add()
+     {
+    	 node n=new node();
+    	 System.out.println("Enter data=");
+    	 n.data=s.nextInt();
+    	 if(head==null)
+    	 {
+    		 head=n;
+            System.out.println("inserted susscfully");
+    	 }
+    	else
+    	{
+    	node temp=head;
+        while(temp.next!=null)
+    	{
+    		 temp=temp.next;
+    	}
+        temp.next=n;
+        System.out.println("inserted succefully");
+        }
+    }
+
+public void display()
+{
+	node temp;
+	temp=head;
+	while(temp!=null)
+	{
+		System.out.print(temp.data +"->");
+		temp=temp.next;
+	}
+}
+
+public void find()
+{
+	int d,flag;
+	System.out.println("enter data to be find");
+	d=s.nextInt();
+	flag=0;
+	node temp=head;
+	while(temp!=null)
+	{
+		if(temp.data==d)
+		{   flag=1;
+			System.out.println("found");
+			break;
+		}
+		temp=temp.next;
+	}
+	
+	if(flag==0)
+	{
+		System.out.println("Not found!!");
+	}
+}
+public void isempty()
+{
+  if(head==null)
+  {
+	  System.out.println("list is empty");
+	  
+  }
+  else
+  {
+	  System.out.println("list contains data");
+  }
+}
+public void size()
+{
+	int count=0;
+	node temp=head;
+	if(head==null)
+	{
+		System.out.println("List is empty!!");
+		return;
+	}
+	while(temp!=null)
+	{
+		count++;
+		temp=temp.next;
+	}
+	System.out.println("Size is="+count);
+}
+public void remove()
+{
+	int d;
+	System.out.println("Enter data to be delete=");
+	d=s.nextInt();
+   if(head==null)
+   {
+	   System.out.println("list already empty!!");
+	   
+   }
+   if(head.data==d)
+   {
+	   node temp=head;
+	   head=temp.next;
+	   temp.next=null;
+	   temp=null;
+	   System.out.println("deleted succefully");
+   }
+   else
+   { 
+	   int flag=0;
+	   node temp=head;
+	   node temp1=head.next;
+	   while(temp1!=null)
+	   {
+		   if(temp1.data==d)
+		   {
+			   flag=1;
+			   break;
+		   }
+		   temp=temp1;
+		   temp1=temp1.next;
+		  
+	   }
+	   if(flag==1)
+	   {
+		   temp.next=temp1.next;
+		   temp1.next=null;
+		   temp1=null;
+		   System.out.println("deleted succefully");
+	   }
+	   else
+	   {
+		   System.out.println("data not present");
+	   }
+   }
+}
+}
+
+
+public class Sll {
+
+	public static void main(String[] args)
+	{
+	  Scanner s1=new Scanner(System.in);
+      slllist l=new slllist();
+      int ch;
+      char op='y';
+      while(op=='y')
+      {
+    	  System.out.println("1)add\n2)find\n3)Isempty\n4)display\n5)size\n6)remove");
+    	  System.out.println("Enter choice=");
+    	  ch=s1.nextInt();
+    	  switch(ch)
+    	  {
+    	  case 1: l.add();
+    	          break;
+    	  case 2: l.find();
+    	          break;
+    	  case 3: l.isempty();
+    	          break;
+    	  case 4: l.display();
+    	          break;
+    	  case 5: l.size();
+    	          break;
+    	  case 6: l.remove();
+    	           break;
+    	  default: System.out.println("invalid choice!!");
+    	            break;
+    	  }
+    	  System.out.println("DO you want to continue!![y/n]:");
+    	  op=s1.next().charAt(0);
+    	  
+      }
+      s1.close();
+    	  
+      }
+	}
+
