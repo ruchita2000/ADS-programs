@@ -1,0 +1,509 @@
+#include <iostream>
+
+using namespace std;
+class node
+{
+    string id;
+    string type;
+    string scope;
+    int line;
+    node *next;
+    node *prev;
+public:
+      node()
+      {
+          cout<<"\n Enter Identifier=";
+          cin>>id;
+          cout<<"\n entre type=";
+          cin>>type;
+          cout<<"\nenter scope=";
+          cin>>scope;
+          cout<<"\nenter line number=";
+          cin>>line;
+          prev=NULL;
+          next=NULL;
+
+      }
+      friend class table;
+};
+class table
+{
+    node *h[10];
+    public:
+    table()
+    {
+        for(int i=0;i<10;i++)
+        {
+            h[i]=NULL;
+        }
+    }
+    int fun(char s)
+    {
+        return(s%10);
+    }
+    void ins()  //insert without replacement....
+    {
+        node *n=new node();
+        int key=fun(n->id[0]);
+        if(h[key]==NULL)
+        {
+            h[key]=n;
+            cout<<"successfully added";
+            return;
+        }
+        else
+        {   int flag=0;
+            node *temp;
+            int i=key;
+            do
+            {
+                if(h[i]==NULL)
+                {
+                    h[i]=n;
+                    if(fun(h[key]->id[0])==key)
+                    {
+                      temp=h[key];
+                      while(temp->next!=NULL)
+                      {
+                          temp=temp->next;
+                      }
+                      temp->next=h[i];
+                      h[i]->prev=temp;
+                      cout<<"\ninserted succefully";
+                      return;
+                    }
+                    else
+                    {
+                        int j=(i+1)%10;
+                        while(j!=i)
+                        {
+                            if(h[j]!=NULL && (fun(h[j]->id[0])==key))
+                            {
+                                temp=h[j];
+                                while(temp->next!=NULL)
+                                {
+                                    temp=temp->next;
+                                }
+                                temp->next=h[i];
+                                h[i]->prev=temp;
+                                cout<<"\ninserted succefully";
+                                return;
+                            }
+                            j=(j+1)%10;
+                        }
+                        cout<<"\n inserted succefully";
+                        return;
+                    }
+                }
+                i=(i+1)%10;
+            }while(i!=key);
+
+         if(flag==0)
+         {
+
+             cout<<"\n no space";
+         }
+    }
+    }
+void retrieve(string str)
+{
+    node *temp;
+ int k=fun(str[0]);
+ if(h[k]==NULL)
+ {
+     cout<<"such id not present";
+     return;
+ }
+ if(h[k]->id==str)
+ {
+     cout<<"\n...identifier present...";
+     cout<<"\nid="<<h[k]->id;
+     cout<<"\ntype="<<h[k]->type;
+     cout<<"\nscope"<<h[k]->scope;
+     cout<<"\nline="<<h[k]->line;
+     return;
+ }
+ else
+ {
+     if(fun(h[k]->id[0])==k)
+     {
+         temp=h[k];
+         while(temp!=NULL)
+         {
+             if(temp->id==str)
+             {
+                  cout<<"\n...identifier present...";
+                  cout<<"\nid="<<temp->id;
+                  cout<<"\ntype="<<temp->type;
+                  cout<<"\nscope"<<temp->scope;
+                  cout<<"\nline="<<temp->line;
+                return;
+             }
+            temp=temp->next;
+         }
+         cout<<"id not present!!!";
+     }
+     else
+     {
+
+         int i=k;
+         do
+        {
+             if(fun(h[i]->id[0])==k)
+             {
+                 if(h[i]->id==str)
+                 {
+                    cout<<"\n...id present...";
+                    cout<<"\nid="<<h[i]->id;
+                    cout<<"\ntype="<<h[i]->type;
+                    cout<<"\nscope"<<h[i]->scope;
+                    cout<<"\nline="<<h[i]->line;
+                    return;
+                 }
+                 else
+                 {
+                     temp=h[i];
+                     while(temp!=NULL)
+                     {
+                         if(temp->id==str)
+                         {
+                            cout<<"\n...id present...";
+                            cout<<"\nid="<<temp->id;
+                            cout<<"\ntype="<<temp->type;
+                            cout<<"\nscope"<<temp->scope;
+                            cout<<"\nline="<<temp->line;
+                            return;
+                         }
+                         temp=temp->next;
+                     }
+
+                 }
+             }
+             i=(i+1)%10;
+         }while(i!=k);
+         cout<<"\n not found!!";
+     }
+ }
+}
+void modify(string str)
+{
+    node *temp;
+    int k=fun(str[0]);
+    if(h[k]==NULL)
+    {
+        cout<<"\n such id not present!!";
+        return;
+    }
+    if(h[k]->id==str)
+    {
+        cout<<"\n Update identifier details";
+        cout<<"\n Enter type=";
+        cin>>h[k]->type;
+        cout<<"\n Enter Scope=";
+        cin>>h[k]->scope;
+        cout<<"\n Enter line";
+        cin>>h[k]->line;
+        cout<<"\n...modified succefully";
+        return;
+    }
+    else
+    {
+        if(fun(h[k]->id[0])==k)
+        {
+            temp=h[k];
+            while(temp!=NULL)
+            {
+                if(temp->id==str)
+                {
+                    cout<<"\n Update identifier details";
+                    cout<<"\n Enter type=";
+                    cin>>temp->type;
+                    cout<<"\n Enter Scope=";
+                    cin>>temp->scope;
+                    cout<<"\n Enter line";
+                    cin>>temp->line;
+                    cout<<"\n...modified succefully";
+                    return;
+                }
+                temp=temp->next;
+            }
+            cout<<"\n not found!!";
+            return;
+        }
+        else
+        {
+
+            int i=k;
+            do
+            {
+                if(fun(h[i]->id[0])==k)
+                {
+                    if(h[i]->id==str)
+                    {
+                    cout<<"\n Update identifier details";
+                    cout<<"\n Enter type=";
+                    cin>>h[i]->type;
+                    cout<<"\n Enter Scope=";
+                    cin>>h[i]->scope;
+                    cout<<"\n Enter line";
+                    cin>>h[i]->line;
+                    cout<<"\n...modified succefully";
+                    return;
+                    }
+                    else
+                    {
+
+                        temp=h[i];
+                        while(temp!=NULL)
+                        {
+                            if(temp->id==str)
+                            {
+                            cout<<"\n Update identifier details";
+                            cout<<"\n Enter type=";
+                            cin>>temp->type;
+                            cout<<"\n Enter Scope=";
+                            cin>>temp->scope;
+                            cout<<"\n Enter line";
+                            cin>>temp->line;
+                            cout<<"\n...modified succefully";
+                            return;
+                            }
+                            temp=temp->next;
+                        }
+                    }
+                }
+
+               i=(i+1)%10;
+            }while(i!=k);
+            cout<<"\n not found!!";
+            return;
+        }
+    }
+}
+void del(string str)
+{
+    node *temp;
+  int k=fun(str[0]);
+  if(h[k]==NULL)
+  {
+      cout<<"such id not present!!";
+      return;
+  }
+  if(h[k]->id==str)
+  {
+      if(h[k]->next!=NULL)
+      {
+      h[k]->next->prev=NULL;
+      h[k]=h[k]->next;
+      cout<<"\nDeleted Successfully";
+      return;
+      }
+      else
+      {
+          h[k]=NULL;
+          delete h[k];
+          cout<<"\n Deleted successfully";
+          return;
+      }
+  }
+  else
+  {
+      if(fun(h[k]->id[0])==k)
+      {
+          temp=h[k];
+          while(temp!=NULL)
+          {
+              if(temp->id==str)
+              {
+                  if(temp->next!=NULL)
+                  {
+                      temp->prev->next=temp->next;
+                      temp->next->prev=temp->prev;
+                      delete temp;
+                      cout<<"\n deleted Successfully";
+                      return;
+                  }
+                 else
+                 {
+                    temp->prev->next=temp->next;
+                    temp=NULL;
+                    delete temp;
+                    cout<<"deleted successfully";
+                    return;
+                 }
+              }
+              temp=temp->next;
+          }
+          cout<<"\n id not present!!!";
+          return;
+      }
+      else
+      {
+          int i=k;
+          do
+          {
+              if(fun(h[i]->id[0])==fun(str[0]))
+              {
+                  if(h[i]->id==str)
+                  {
+                      if(h[i]->next!=NULL)
+                      {
+                          h[i]->next->prev=NULL;
+                          h[i]=h[i]->next;
+                          cout<<"\n deleted Successfully";
+                          return;
+                      }
+                      else
+                      {
+                          h[i]=NULL;
+                          cout<<"\n Deleted Successfully";
+                          return;
+                      }
+                  }
+                  else
+                  {
+                      temp=h[i];
+                      while(temp!=NULL)
+                      {
+                          if(temp->id==str)
+                          {
+                              if(temp->next!=NULL)
+                              {
+
+                                temp->prev->next=temp->next;
+                                 temp->next->prev=temp->prev;
+                                temp=NULL;
+                                cout<<"\n deleted succefully";
+                                return;
+                              }
+                              else
+                              {
+                                  temp->prev->next=temp->next;
+                                  temp=NULL;
+                                  cout<<"\n deleted succefully";
+                                  return;
+                              }
+
+                          }
+                          temp=temp->next;
+                      }
+                      }
+              }
+             i=(i+1)%10;
+          }while(i!=k);
+
+          cout<<"\n not found!!!";
+
+      }
+  }
+
+}
+void disp()
+{
+
+    for(int i=0;i<10;i++)
+    {
+        if(h[i]!=NULL)
+        {
+        cout<<"\nid="<<h[i]->id;
+        cout<<"\ntype="<<h[i]->type;
+        cout<<"\nscope="<<h[i]->scope;
+        cout<<"\n line number ="<<h[i]->line;
+        }
+    }
+}
+//...with replacement....
+void rep()
+{
+    node *n=new node();
+    int key=fun(n->id[0]);
+    if(h[key]==NULL)
+    {
+      h[key]=n;
+      cout<<"\n inserted succefully!!";
+      return;
+    }
+    else
+    {
+        node *temp;
+        int i=key;
+        do
+        {
+           if(h[i]==NULL)
+           {
+
+               if(fun(h[key]->id[0])==key)
+               {
+                   h[i]=n;
+                   temp=h[key];
+                   while(temp->next!=NULL)
+                   {
+                       temp=temp->next;
+                   }
+                   temp->next=h[i];
+                   h[i]->prev=temp;
+                   cout<<"\n inserted succefully!!";
+                   return;
+               }
+               else
+               {
+                   h[i]=h[key];
+                   h[key]=n;
+                   cout<<"inserted succefully";
+                   return;
+               }
+           }
+           i=(i+1)%10;
+        }while(i!=key);
+
+        cout<<"\nNo space";
+    }
+}
+};
+int main()
+{
+    table t;
+    int flag=0;
+    int op;
+    string str;
+    while(flag!=1)
+    {
+
+        cout<<"\n1)insert\n2)dis\n3)retrieve\n4)modify\n5)delete\n6)insert with replacement\n7)exit";
+        cout<<"\n enter choice=";
+        cin>>op;
+        switch(op)
+        {
+            case 1: t.ins();
+                     break;
+            case 2:
+                     t.disp();
+                     break;
+            case 3:
+                    cout<<"\n Enter id=";
+                    cin>>str;
+                    t.retrieve(str);
+                    break;
+            case 4:
+                    cout<<"\n Enter id=";
+                    cin>>str;
+                    t.modify(str);
+                    break;
+            case 5:
+                    cout<<"\n Enter id=";
+                    cin>>str;
+                    t.del(str);
+                    break;
+            case 6:
+                    t.rep();
+                    break;
+            case 7:
+                   flag=1;
+                   break;
+            default:cout<<"\n invalid choice!!";
+                     break;
+
+        }
+    }
+    return 0;
+}
