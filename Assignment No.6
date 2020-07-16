@@ -1,0 +1,205 @@
+#include <iostream>
+
+using namespace std;
+class node
+{
+    string name;
+    long int tel;
+    int pin;
+    public:
+    node()
+    {
+        cout<<"\n enter name=";
+        cin>>name;
+        cout<<"\n enter telephone number=";
+        cin>>tel;
+        cout<<"\n enter pincode=";
+        cin>>pin;
+    }
+    friend class hashtable;
+};
+class hashtable
+{
+     node *h[10];
+     int fun(int x)
+     {
+         return (x%10);
+     }
+ public:
+     hashtable()
+     {
+       for(int i=0;i<10;i++)
+       {
+          h[i]=NULL;
+       }
+     }
+     void nonins()
+     {
+         node *n=new node();
+         int k=fun(n->pin);
+         if(h[k]==NULL)
+         {
+             h[k]=n;
+             cout<<"\n inserted succefully";
+         }
+         else
+         {
+             int fl=0;
+             int i=0;
+             while(i<10)
+             {
+                 if(h[i]==NULL)
+                 {
+                     h[i]=n;
+                     cout<<"inserted succefully";
+                     return;
+                 }
+                 i=(i+1)%10;
+             }
+             if(fl==0)
+             {
+                 cout<<"\n NO SPACE";
+             }
+         }
+}
+void repins()
+{
+  node *n=new node();
+  int key=fun(n->pin);
+  if(h[key]==NULL)
+  {
+      h[key]=n;
+      cout<<"\n inserted successfully";
+  }
+  else
+  {
+      int i=key;
+      int fl=0;
+      do
+      {
+          if(h[i]==NULL)
+            {
+               fl=1;
+               if(fun(h[key]->pin)==key)   //check value to be replace is at correct place or not
+               {
+                 h[i]=n;
+                 cout<<"successfully inserted";
+                 return;
+               }
+               else
+               {
+                   h[i]=h[key];
+                   h[key]=n;
+                   cout<<"\n inserted successfully";
+                   return;
+               }
+            }
+          i=(i+1)%10;
+       }while(i!=key);
+       if(fl==0)
+       {
+           cout<<"\n NO SPACE!!";
+       }
+  }
+}
+void display()
+{
+    for(int i=0;i<10;i++)
+    {
+        if(h[i]!=NULL)
+        {
+            cout<<"\nname="<<h[i]->name;
+            cout<<"\ntel="<<h[i]->tel;
+            cout<<"\npin="<<h[i]->pin;
+        }
+    }
+}
+int findh(int d)
+{
+    int k=fun(d);
+    int flag=0;
+    if(h[k]!=NULL && h[k]->pin==d)
+    {
+        return k;
+    }
+    else
+    {
+        int i=k+1;
+        do
+        {
+            if(h[i]!=NULL && h[i]->pin==d)
+            {
+                return i;
+            }
+            i=(i+1)%10;
+        }while(i!=k);
+if(flag==0)
+{
+
+       return -1;
+}
+    }
+}
+void del()
+{
+    int d;
+    cout<<"\n Enter data to be delete=";
+    cin>>d;
+    int k=findh(d);
+    if(k!=-1)
+    {
+        h[k]=NULL;
+        cout<<"\n deleted successfully"<<k;
+    }
+    else
+    {
+        cout<<"such data not present!!";
+    }
+}
+};
+int main()
+{
+
+    hashtable h;
+    int flag=0;
+    int op;
+    int d;
+
+    while(flag!=1)
+    {
+        cout<<"\n1)insert without replacement\n2)insert with replacement\n3)find\n4)deletion\n5)display hashtable\n6)exit";
+        cout<<"\nEnter choice=";
+        cin>>op;
+        switch(op)
+        {
+
+        case 1:
+                h.nonins();
+                break;
+        case 2:
+                h.repins();
+                break;
+        case 3:
+                cout<<"\n enter pincode to be find=";
+                cin>>d;
+                 if(h.findh(d)!=-1)
+                 {
+                     cout<<"\n..data present..";
+                 }
+                 else
+                 {
+                     cout<<"\n not present";
+                 }
+                 break;
+        case 4: h.del();
+                break;
+        case 5: h.display();
+                break;
+        case 6: flag=1;
+                break;
+        default: cout<<"\ninvalid choice!!";
+                 break;
+        }
+    }
+    return 0;
+}
