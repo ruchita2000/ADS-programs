@@ -1,0 +1,221 @@
+package execp;
+import java.util.*;
+abstract class stackclass
+{
+	stackclass()
+	{
+		
+	}
+	public final void fun()
+	{
+		Scanner s=new Scanner(System.in);
+		int flag=0;
+		int op,data;
+		while(flag!=1)
+		{
+		System.out.println("1)Push\n2)Pop\n3)top element\n4)Exit");
+		System.out.println("Enter Choice=");
+		op=s.nextInt();
+		switch(op)
+		{
+		case 1:
+			    push();
+			    break;
+		case 2:
+			   data=pop();
+			   if(data!=0)
+			   {
+				   System.out.print("popped element");
+			   }
+			   
+			   break;
+		case 3:
+			     data=top();
+			     if(data!=0)
+			     {
+			    	 System.out.print("top of stack");
+			     }
+			     break;
+		case 4:
+			     flag=1;
+			     break;
+		default:
+			    System.out.println("invalid choice!!");
+			    break;
+		}
+		}
+		
+	}
+  abstract protected void push();
+  abstract protected int pop();
+  abstract protected int top();
+}
+
+class Intstack extends stackclass
+{
+	int [] arr=new int[10];
+	int top=-1;
+	
+	protected int pop()
+	{
+	   RuntimeException er=new RuntimeException("underflow!!");
+	   try
+	   {     if(top==-1)
+		     {
+			   throw er; 
+		     }
+		     else
+		     {
+			   System.out.println(" "+arr[top--]+" ");
+			   return 1;
+		     }
+	   }
+	   catch(RuntimeException err)
+	   {
+		   System.out.println("Exception Cause::"+er);
+		   return 0;
+	   }
+	   
+	}
+	protected int top()
+	{
+		RuntimeException er=new RuntimeException("Underflow!!");
+		try
+		{
+			if(top==-1)
+			{
+				throw er;
+			}
+			else
+			{
+				System.out.println(" "+arr[top]+" ");
+				return 1;
+			}
+		}
+		catch(RuntimeException err)
+		{
+			System.out.println("Exception cause::"+err);
+			return 0;
+		}
+	}
+	protected void push()
+	{
+	  Scanner s=new Scanner(System.in);
+	  int data;
+	  System.out.println("Enter data to be pushed");
+	  data=s.nextInt();
+	  RuntimeException er=new RuntimeException("Overflow!!");
+	  try
+	  {
+	    if(top==9)
+	   {
+		 throw er;
+	   }
+	  else
+	  {
+		  arr[++top]=data;
+		 System.out.println("Inserted succefully");
+		 
+	  }
+	  }
+	  catch(RuntimeException err)
+	  {
+		  System.out.println("Exception Caused::"+err);
+		  
+	  }
+	 
+	}
+	
+}
+class Charstack extends stackclass
+{
+	
+	char [] arr=new char[10];
+	char c;
+	int top=-1;
+	protected int pop()
+	{
+		RuntimeException er=new RuntimeException("underflow!!");
+		try
+		{
+			if(top==-1)
+			{
+				throw er;
+			}
+			else
+			{
+				System.out.println(""+arr[top--]+"");
+				return 1;
+			}
+		}
+		catch(RuntimeException err)
+		{
+			System.out.println("Exception Caused::"+err);
+			return 0;
+		}
+	}
+	protected int top()
+	{
+		RuntimeException er=new RuntimeException("underflow");
+		try
+		{
+			if(top==-1)
+			{
+				throw er;
+			}
+			else
+			{
+				System.out.println(""+arr[top]+"");
+				return 1;
+			}
+		}
+		catch(RuntimeException err)
+		{
+			System.out.println("Exception caused::"+err);
+			return 0;
+		}
+	}
+	protected void push()
+	{
+		RuntimeException er=new RuntimeException("overflow");
+		System.out.println("Enter Data to be insert=");
+		Scanner s=new Scanner(System.in);
+		c=s.next().charAt(0);
+		try
+		{
+			if(top==9)
+		    {
+			  throw er;
+		    }
+		   else
+		    {
+			arr[++top]=c;
+			System.out.println("Inserted succefully");
+		    }
+	   }
+		catch(RuntimeException err)
+		{
+			System.out.println("Exception caused"+err);
+		}
+ 
+}
+	
+}	
+public class Temp
+{  
+	public static void main(String[] args)
+	{
+    System.out.println("....integer stack....");
+	stackclass s1=new Intstack();
+	s1.fun();
+	System.out.println("....character satack....");
+	s1=new Charstack();
+	s1.fun();
+	}
+}
+	
+	
+	
+	
+	
+	
