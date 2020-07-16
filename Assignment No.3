@@ -1,0 +1,174 @@
+#include <iostream>
+
+using namespace std;
+class node
+{
+
+    int data;
+    int lbit,rbit;
+    node *lchild,*rchild;
+public:
+
+    friend class tbt;
+    friend class queue;
+};
+class queue
+{
+
+    node *que[20];
+    int f,r;
+public:
+
+    queue()
+    {
+        f=-1;
+        r=-1;
+    }
+    void add(node *t)
+    {
+        r++;
+        que[r]=t;
+    }
+    node *del()
+    {
+
+        f++;
+        return que[f];
+    }
+    int isempty()
+    {
+        if(r==-1 || f>=r)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    friend class tbt;
+};
+class tbt
+{
+    node *head;
+    queue q;
+public:
+
+    tbt()
+    {
+        head=NULL;
+    }
+    void create()
+    {
+        node *temp,*x;
+        int data;
+        head=new node();
+        head->data=0;
+        head->lbit=0;
+        head->rbit=1;
+        head->lchild=head->rchild=head;
+        q.add(head);
+        while(q.isempty()==0)
+        {
+            temp=q.del();
+            cout<<"\n Enter left child data of["<<temp->data<<"]::";
+            cin>>data;
+            if(data!=0)
+            {
+                x=new node();
+                x->data=data;
+                linsert(temp,x);
+                q.add(x);
+            }
+            if(temp!=head)
+            {
+                cout<<"\n enter right child data of["<<temp->data<<"]::";
+                cin>>data;
+                if(data!=0)
+                {
+                    x=new node();
+                    x->data=data;
+                    rinsert(temp,x);
+                    q.add(x);
+                }
+            }
+        }
+    }
+    void linsert(node *s,node *t)
+    {
+        t->lchild=s->lchild;
+        t->lbit=s->lbit;
+        t->rchild=s;
+        t->rbit=0;
+        s->lchild=t;
+        s->lbit=1;
+    }
+    void rinsert(node *s,node *t)
+    {
+        t->rchild=s->rchild;
+        t->rbit=s->rbit;
+        t->lchild=s;
+        t->lbit=0;
+        s->rchild=t;
+        s->rbit=1;
+    }
+    void inorder()
+    {
+        node *t;
+        t=head->lchild;
+        while(t->lbit==1)
+        {
+            t=t->lchild;
+        }
+        while(t!=head)
+        {
+            cout<<"\t"<<t->data;
+            t=insuc(t);
+        }
+    }
+    node *insuc(node *t)
+    {
+        if(t->rbit==0)
+        {
+            return(t->rchild);
+        }
+        t=t->rchild;
+        while(t->lbit==1)
+        {
+            t=t->lchild;
+        }
+        return t;
+    }
+    void preorder()
+    {
+        node *t;
+        t=head->lchild;
+        while(t!=head)
+        {
+            cout<<"\t"<<t->data;
+            t=presuc(t);
+        }
+    }
+    node *presuc(node *t)
+    {
+        if(t->lbit==1)
+        {
+            return (t->lchild);
+        }
+        while(t->rbit==0)
+        {
+            t=t->rchild;
+        }
+        return(t->rchild);
+    }
+};
+int main()
+{
+    tbt t;
+    t.create();
+    cout<<"\n....inorder traverser\n";
+    t.inorder();
+    cout<<"\n preorder traverser\n";
+    t.preorder();
+    return 0;
+}
