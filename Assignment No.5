@@ -1,0 +1,128 @@
+#include <iostream>
+using namespace std;
+
+class krus
+{
+
+    int mat[20][20];
+    int s_mat[20][3];
+    int l=0;
+    int m;
+    int cont=0;
+    char op;
+    int w;
+    public:
+    void create()
+    {
+        cout<<"\n Enter total number offices=";
+        cin>>m;
+        for(int i=0;i<m;i++)
+        {
+            for(int j=i;j<m;j++)
+            {
+                cout<<"\nDo u want to establish connection between["<<i<<"]["<<j<<"](y/n):";
+                cin>>op;
+                if(op=='y')
+                {
+                    cont++;
+                    cout<<"\n Enter charges=";
+                    cin>>w;
+                    mat[i][j]=w;
+                    mat[j][i]=w;
+                }
+                else
+                {
+                    mat[i][j]=999;
+                    mat[j][i]=999;
+                }
+            }
+        }
+    }
+    void display()
+    {
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                cout<<"\t"<<mat[i][j];
+            }
+            cout<<"\n";
+        }
+    }
+    void trans(int i,int j)
+    {
+        s_mat[l][0]=i;
+        s_mat[l][1]=j;
+        s_mat[l][2]=mat[i][j];
+        l++;
+    }
+    void kruskal()
+    {
+        int visit[30];
+        int k=0;
+        int min_wt=0;
+        int x,y,z;
+        //for sorting purpose...
+        for(int i=0;i<m;i++)
+        {
+            for(int j=i;j<m;j++)
+            {
+                if(mat[i][j]!=999)
+                {
+                    trans(i,j);
+                }
+            }
+        }//end...
+        for(int i=0;i<l;i++)
+        {
+            for(int j=i;j<l;j++)
+            {
+                if(s_mat[i][2]>s_mat[j][2])
+                {
+                  x=s_mat[i][0];
+                  y=s_mat[i][1];
+                  z=s_mat[i][2];
+                  s_mat[i][0]=s_mat[j][0];
+                  s_mat[i][1]=s_mat[j][1];
+                  s_mat[i][2]=s_mat[j][2];
+                  s_mat[j][0]=x;
+                  s_mat[j][1]=y;
+                  s_mat[j][2]=z;
+                }
+            }
+        }//selection sort done...
+cout<<"\n Matrix after sort.."<<endl;
+        for(int i=0;i<l;i++)
+        {
+            for(int j=0;j<3;j++)
+            {
+                cout<<"\t"<<s_mat[i][j];
+            }
+            cout<<"\n";
+        }//display sparse..
+
+        for(int i=0;i<m;i++)
+        {
+            visit[i]=0;
+        }
+        while(k<cont)
+        {
+            if(visit[s_mat[k][0]]!=1 || visit[s_mat[k][1]]!=1)
+            {
+                min_wt=min_wt+s_mat[k][2];
+                cout<<"\n"<<s_mat[k][0]<<"<==>"<<min_wt<<"<==>"<<s_mat[k][1];
+                visit[s_mat[k][0]]=visit[s_mat[k][1]]=1;
+            }
+            k++;
+        }
+        cout<<"\n Minimum cost::"<<min_wt;
+    }
+};
+int main()
+{
+    krus k;
+    k.create();
+    k.display();
+    k.kruskal();
+    return 0;
+}
